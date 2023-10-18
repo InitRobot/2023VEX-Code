@@ -1,0 +1,19 @@
+{
+	"extension": {
+		"version": "0.5.0",
+		"json": 2
+	},
+	"project": {
+		"name": "Defnece1",
+		"description": "Project 1 for defence car",
+		"creationDate": "9/30/2023, 5:45:17 PM",
+		"platform": "V5",
+		"language": "cpp",
+		"slot": 4,
+		"sdkVersion": "V5_20220726_10_00_00",
+		"cpp": {
+			"includePath": [],
+			"printf_float": true
+		}
+	}
+}
