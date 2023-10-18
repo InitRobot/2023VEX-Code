@@ -4,12 +4,12 @@
 		"json": 2
 	},
 	"project": {
-		"name": "Defnece1",
-		"description": "Project 1 for defence car",
-		"creationDate": "9/30/2023, 5:45:17 PM",
+		"name": "defence",
+		"description": "",
+		"creationDate": "2023/10/17 18:34:36",
 		"platform": "V5",
 		"language": "cpp",
-		"slot": 4,
+		"slot": 1,
 		"sdkVersion": "V5_20220726_10_00_00",
 		"cpp": {
 			"includePath": [],
