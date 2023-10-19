@@ -187,7 +187,14 @@ void usercontrol(void)
         //launcher.spin(forward, 128*axis3, voltageUnits::mV);
 
         //手动代码
-        
+        /*if (Controller1.ButtonR1.pressing())
+        {
+            launcher.spin(forward, -VOLTAGE5, voltageUnits::mV);
+        }*/
+        if (Controller1.ButtonL1.pressing())
+        {
+            launcher.spin(forward, VOLTAGE5, voltageUnits::mV);
+        }
         //--------------------------------------------end launcher--------------------------------------------
 
         

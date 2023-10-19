@@ -22,7 +22,7 @@
 
 ### 右侧按钮
 
-- L1：
+- L1：launcher往下
 - L2：
 - R1：intake往前
 - R2：intake往后
