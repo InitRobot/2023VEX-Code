@@ -168,6 +168,7 @@ void usercontrol(void)
 
         
         //============================================launcher==========================
+        //自动代码
         //launch = 0
         float launcher_spin = VOLTAGE5;
         if (Controller1.ButtonL1.pressing())
@@ -184,6 +185,9 @@ void usercontrol(void)
         launcher.spin(forward, launcher_spin * launch, voltageUnits::mV);
         intake.spin(forward, intake_spin * ball, voltageUnits::mV);
         //launcher.spin(forward, 128*axis3, voltageUnits::mV);
+
+        //手动代码
+        
         //--------------------------------------------end launcher--------------------------------------------
 
         
