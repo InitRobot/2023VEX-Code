@@ -40,8 +40,12 @@ controller Controller1 = controller(primary);
 distance distance_sensor = distance(PORT18);
 
 //classis
-motor classis_left = motor(PORT1, ratio18_1, false);                        //bottom_l
-motor classis_right = motor(PORT2, ratio18_1, false);                       //bottom_r
+motor classis_left_1 = motor(PORT1, ratio18_1, false);
+motor classis_left_2 = motor(PORT12, ratio18_1, true);
+motor_group classis_left = motor_group(classis_left_1, classis_left_2);                        //bottom_l
+motor classis_right_1 = motor(PORT2, ratio18_1, false);
+motor classis_right_2 = motor(PORT13, ratio18_1, true);
+motor_group classis_right = motor_group(classis_right_1, classis_right_2);                       //bottom_r
 motor classis_horizontal = motor(PORT3, ratio18_1, false);
 inertial DrivetrainInertial = inertial(PORT6);
 smartdrive Drivetrain = smartdrive(classis_left, classis_right, DrivetrainInertial, 319.19, 320, 40, mm, 1);
