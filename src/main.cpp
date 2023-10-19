@@ -11,6 +11,10 @@
 
 using namespace vex;
 
+//定义电压上限
+const int VOLTAGE3=128;
+const int VOLTAGE5=12800;
+
 // A global instance of competition
 competition Competition;
 
@@ -39,7 +43,7 @@ distance distance_sensor = distance(PORT18);
 motor classis_left = motor(PORT1, ratio18_1, false);                        //bottom_l
 motor classis_right = motor(PORT2, ratio18_1, false);                       //bottom_r
 motor classis_horizontal = motor(PORT3, ratio18_1, false);
-inertial DrivetrainInertial = inertial(PORT21);
+inertial DrivetrainInertial = inertial(PORT6);
 smartdrive Drivetrain = smartdrive(classis_left, classis_right, DrivetrainInertial, 319.19, 320, 40, mm, 1);
 
 //launcher
@@ -66,15 +70,15 @@ void classis_move(float left_volt, float right_volt, float horizontal_volt)
     float post_classis_left_volt = left_volt;
     float post_classis_right_volt = right_volt;
 
-    if (left_volt > 12000)
+    if (left_volt > VOLTAGE5)
     {
-        post_classis_left_volt = 12000;
-        post_classis_right_volt = post_classis_right_volt / post_classis_left_volt * 12000;
+        post_classis_left_volt = VOLTAGE5;
+        post_classis_right_volt = post_classis_right_volt / post_classis_left_volt * VOLTAGE5;
     }
-    else if (right_volt > 12000)
+    else if (right_volt > VOLTAGE5)
     {
-        post_classis_right_volt = 12000;
-        post_classis_left_volt = post_classis_left_volt / post_classis_right_volt * 12000;
+        post_classis_right_volt = VOLTAGE5;
+        post_classis_left_volt = post_classis_left_volt / post_classis_right_volt * VOLTAGE5;
     }
 
     classis_left.spin(forward, post_classis_left_volt, voltageUnits::mV);
@@ -104,7 +108,7 @@ void usercontrol(void)
     //底盘初始化
     DrivetrainInertial.calibrate();
 
-    float intake_spin = -12000;
+    float intake_spin = -VOLTAGE5;
     int ball = 0;//0:stop,1:up,-1:down
     int times = 0;
     int launch = 0;
@@ -165,7 +169,7 @@ void usercontrol(void)
         
         //============================================launcher==========================
         //launch = 0
-        float launcher_spin = 12000;
+        float launcher_spin = VOLTAGE5;
         if (Controller1.ButtonL1.pressing())
         {
             launch = 1;
@@ -192,9 +196,9 @@ void usercontrol(void)
             axis1 = err * 1;
         }//end aim
 
-        float pre_classis_left_volt = 120 * axis3 + 120 * axis1 * sensitivity;
-        float pre_classis_right_volt = 120 * axis3 - 120 * axis1 * sensitivity;
-        float pre_classis_horizontal_volt = 120 * axis4;
+        float pre_classis_left_volt = VOLTAGE3 * axis3 + VOLTAGE3 * axis1 * sensitivity;
+        float pre_classis_right_volt = VOLTAGE3 * axis3 - VOLTAGE3 * axis1 * sensitivity;
+        float pre_classis_horizontal_volt = VOLTAGE3 * axis4;
         classis_move(pre_classis_left_volt, pre_classis_right_volt, pre_classis_horizontal_volt);
         //-------------------------------------------------end classis-------------------------------------------------------
 
