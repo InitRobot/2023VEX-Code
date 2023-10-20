@@ -12,14 +12,14 @@
 using namespace vex;
 
 //定义电压上限
-const int VOLTAGE3=128;
-const int VOLTAGE5=12800;
+const int VOLTAGE3 = 128;
+const int VOLTAGE5 = 12800;
 
 //定义intake模式
-int intake_mode=0;//0：无模式，1：暂存，2：发射
+int intake_mode = 0;//0：无模式，1：暂存，2：发射
 
 //定义intake方向
-int intake_direction=2;//0：前，1：后，2：停
+int intake_direction = 2;//0：前，1：后，2：停
 
 //定义粽球距离(mm)
 float ball_distance;
@@ -105,37 +105,37 @@ void classis_move(float left_volt, float right_volt, float horizontal_volt)
 void intake_forward()
 {
     intake.spin(forward, -VOLTAGE5, voltageUnits::mV);
-    intake_direction=0;
+    intake_direction = 0;
 }
 
 void intake_backward()
 {
     intake.spin(forward, VOLTAGE5, voltageUnits::mV);
-    intake_direction=1;
+    intake_direction = 1;
 }
 
 void intake_stop()
 {
     intake.spin(forward, 0, voltageUnits::mV);
-    intake_direction=2;
+    intake_direction = 2;
 }
 
 //intake&launcher状态转换
 void manual_mode()
 {
-    intake_mode=0;
+    intake_mode = 0;
     intake_stop();
 }
 
 void storage_mode()
 {
-    intake_mode=1;
+    intake_mode = 1;
     intake_stop();
 }
 
 void launch_mode()
 {
-    intake_mode=2;
+    intake_mode = 2;
 }
 
 //launcher方向控制
@@ -207,32 +207,32 @@ void usercontrol(void)
 
         //=========================================intake=================================
         //手动操控
-        if(intake_mode!=1)
+        if (intake_mode != 1)
         {
             //按住R1 intake向上
             Controller1.ButtonR1.pressed(intake_forward);
             Controller1.ButtonR1.released(intake_stop);
             //按住R2 intake向下
             Controller1.ButtonR2.pressed(intake_backward);
-            Controller1.ButtonR2.released(intake_stop);           
+            Controller1.ButtonR2.released(intake_stop);
         }
 
         //检测模式更改
         Controller1.ButtonY.pressed(manual_mode);
         Controller1.ButtonX.pressed(storage_mode);
         Controller1.ButtonA.pressed(launch_mode);
-        
+
         //对应模式代码
         Controller1.Screen.clearScreen();//在手柄屏幕上输出模式
-        Controller1.Screen.print("%d:",intake_mode);
-        switch(intake_mode)
+        Controller1.Screen.print("%d:", intake_mode);
+        switch (intake_mode)
         {
-            case 0://无模式
+        case 0://无模式
             {
                 Controller1.Screen.print("Manual");
                 break;
             }
-            case 1://暂存
+        case 1://暂存
             {
                 Controller1.Screen.print("Storage");
                 Controller1.ButtonR1.pressed(intake_forward);
@@ -241,11 +241,11 @@ void usercontrol(void)
                 //当球离传感器400mm以内时阻止球向上
                 if (ball_distance < 400 && intake_direction == 0)
                 {
-                    intake.spin(forward,0, voltageUnits::mV);
+                    intake.spin(forward, 0, voltageUnits::mV);
                 }
                 break;
             }
-            case 2://发射
+        case 2://发射
             {
                 Controller1.Screen.print("Launch");
                 //intake始终向上
@@ -254,29 +254,29 @@ void usercontrol(void)
                 //球距小于等于175mm时发射
                 if (ball_distance <= 175)
                 {
-                    ball_distance=distance_sensor.objectDistance(mm);
+                    ball_distance = distance_sensor.objectDistance(mm);
                     launcher.spin(forward, VOLTAGE5, voltageUnits::mV);
                     wait(700, msec);
                     Controller1.Screen.clearScreen();
-                    Controller1.Screen.print("%d",ball_distance);
+                    Controller1.Screen.print("%d", ball_distance);
                     break;
                 }
                 else launcher.spin(forward, 0, voltageUnits::mV);
                 break;
             }
-            default: Controller1.Screen.print("ERR!");//模式不在[0,2]内则报错
+        default: Controller1.Screen.print("ERR!");//模式不在[0,2]内则报错
         }
         Controller1.Screen.newLine();
         //-------------------------------------------------------end intake-------------------------
 
-        
+
         //============================================launcher==========================
         //按住L1时launcher往下
         Controller1.ButtonL1.pressed(launcher_forward);
         Controller1.ButtonL1.released(launcher_stop);
         //--------------------------------------------end launcher--------------------------------------------
 
-        
+
         //=====================================================classis==================================================
 
         //aim
