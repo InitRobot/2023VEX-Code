@@ -22,14 +22,14 @@
 
 ### 右侧按钮
 
-- L1：launcher往下
-- L2：
-- R1：intake往前
-- R2：intake往后
+- L1：
+- L2：自瞄
+- R1：intake往上
+- R2：intake往下
 
 ### 前侧按钮
 
-- A：intake停止
-- B：
-- X：
+- A：手动模式
+- B：存储模式
+- X：发射模式
 - Y：

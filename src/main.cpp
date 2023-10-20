@@ -15,6 +15,15 @@ using namespace vex;
 const int VOLTAGE3=128;
 const int VOLTAGE5=12800;
 
+//定义intake模式
+int intake_mode=0;//0：无模式，1：暂存，2：发射
+
+//定义intake方向
+int intake_direction=2;//0：前，1：后，2：停
+
+//定义粽球距离(mm)
+float ball_distance;
+
 // A global instance of competition
 competition Competition;
 
@@ -66,7 +75,7 @@ motor_group intake = motor_group(intake_left, intake_right);                    
 bool RemoteControlCodeEnabled = true;
 
 
-float sensitivity = 0.7;//range:(0,1]...........................................................................require seting<<<<<<<<<<<<<<<<<<<-----
+float sensitivity = 0.5;//range:(0,1]...........................................................................require seting<<<<<<<<<<<<<<<<<<<-----
 
 //The followings are to prevent over voltaging on one side, which leads to a lack of rotation while at high speed.
 void classis_move(float left_volt, float right_volt, float horizontal_volt)
@@ -90,6 +99,64 @@ void classis_move(float left_volt, float right_volt, float horizontal_volt)
     classis_horizontal.spin(forward, horizontal_volt, voltageUnits::mV);
 }
 
+//定义函数
+
+//intake模式转换
+void change_intake()
+{
+    intake_mode++;//切换到下一个模式
+    if(intake_mode>2) intake_mode=0;//处理溢出
+    //Controller1.Screen.print("%d ",intake_mode);
+    //Controller1.Screen.clearScreen();
+    return;
+}
+
+//intake方向控制
+void intake_forward()
+{
+    intake.spin(forward, -VOLTAGE5, voltageUnits::mV);
+    intake_direction=0;
+}
+
+void intake_backward()
+{
+    intake.spin(forward, VOLTAGE5, voltageUnits::mV);
+    intake_direction=1;
+}
+
+void intake_stop()
+{
+    intake.spin(forward, 0, voltageUnits::mV);
+    intake_direction=2;
+}
+
+//intake&launcher状态转换
+void manual_mode()
+{
+    intake_mode=0;
+    intake_stop();
+}
+
+void storage_mode()
+{
+    intake_mode=1;
+    intake_stop();
+}
+
+void launch_mode()
+{
+    intake_mode=2;
+}
+
+void launcher_forward()
+{
+    launcher.spin(forward, VOLTAGE5, voltageUnits::mV);
+}
+
+void launcher_stop()
+{
+    launcher.spin(forward, 0, voltageUnits::mV);
+}
 
 //所有应用于自动之前的初始化程序
 void pre_auton(void)
@@ -138,7 +205,7 @@ void usercontrol(void)
         Brain.Screen.print(times);
         //end vision
 
-        float ball_distance = distance_sensor.objectDistance(mm);
+        ball_distance = distance_sensor.objectDistance(mm);
         Brain.Screen.newLine();
         Brain.Screen.print(distance_sensor.objectDistance(mm));
         //end distance
@@ -150,55 +217,79 @@ void usercontrol(void)
         float axis4 = Controller1.Axis4.position(percent);
 
         //=========================================intake=================================
-        //float intake_spin = 0;
+        //手动操控
+        /*if(Controller1.ButtonR1.pressing())
+        {
+            intake.spin(forward, -VOLTAGE5, voltageUnits::mV);
+        }
+        if(Controller1.ButtonR2.pressing())
+        {
+            intake.spin(forward, VOLTAGE5, voltageUnits::mV);
+        }
+        else if(intake_mode==0) intake.spin(forward, 0, voltageUnits::mV);
+        */
+        if(intake_mode!=1)
+        {
+            Controller1.ButtonR1.pressed(intake_forward);
+            Controller1.ButtonR1.released(intake_stop);
+            Controller1.ButtonR2.pressed(intake_backward);
+            Controller1.ButtonR2.released(intake_stop);           
+        }
 
-        if (Controller1.ButtonR2.pressing())
+        //模式更改
+        Controller1.ButtonY.pressed(manual_mode);
+        Controller1.ButtonX.pressed(storage_mode);
+        Controller1.ButtonA.pressed(launch_mode);
+        
+        //模式检测&输出
+        Controller1.Screen.clearScreen();
+        Controller1.Screen.print("%d:",intake_mode);
+        switch(intake_mode)
         {
-            ball = -1;
+            case 0://无模式
+            {
+                Controller1.Screen.print("Manual");
+                break;
+            }
+            case 1://暂存
+            {
+                Controller1.Screen.print("Storage");
+                //Controller1.ButtonR1.pressed(intake_pull);
+                Controller1.ButtonR1.pressed(intake_forward);
+                Controller1.ButtonR2.pressed(intake_backward);
+                ball_distance=distance_sensor.objectDistance(mm);
+                if(ball_distance<400&&intake_direction==0) 
+                {
+                    intake.spin(forward,0, voltageUnits::mV);
+                }
+                break;
+            }
+            case 2://发射
+            {
+                Controller1.Screen.print("Launch");
+                    intake.spin(forward, -VOLTAGE5, voltageUnits::mV);
+                    ball_distance=distance_sensor.objectDistance(mm);
+                    if(ball_distance<=175)
+                    {
+                        ball_distance=distance_sensor.objectDistance(mm);
+                        launcher.spin(forward, VOLTAGE5, voltageUnits::mV);
+                        wait(700, msec);
+                        Controller1.Screen.clearScreen();
+                        Controller1.Screen.print("%d",ball_distance);
+                        break;
+                    }
+                    else launcher.spin(forward, 0, voltageUnits::mV);
+                break;
+            }
+            default: Controller1.Screen.print("ERR!");
         }
-        if (Controller1.ButtonA.pressing())
-        {
-            ball = 0;
-        }
-        if (Controller1.ButtonR1.pressing())
-        {
-            ball = 1;
-        }
-        if (ball_distance <= 200 && ball == 1)
-        {
-            ball = 0;
-        }
+        Controller1.Screen.newLine();
         //-------------------------------------------------------end intake-------------------------
 
         
         //============================================launcher==========================
-        //自动代码
-        //launch = 0
-        float launcher_spin = VOLTAGE5;
-        if (Controller1.ButtonL1.pressing())
-        {
-            launch = 1;
-            ball = 1;
-        }
-        if (launch == 1 && ball_distance >= 250)
-        {
-            launch = 0;
-            ball = 0;
-        }
-
-        launcher.spin(forward, launcher_spin * launch, voltageUnits::mV);
-        intake.spin(forward, intake_spin * ball, voltageUnits::mV);
-        //launcher.spin(forward, 128*axis3, voltageUnits::mV);
-
-        //手动代码
-        /*if (Controller1.ButtonR1.pressing())
-        {
-            launcher.spin(forward, -VOLTAGE5, voltageUnits::mV);
-        }*/
-        if (Controller1.ButtonL1.pressing())
-        {
-            launcher.spin(forward, VOLTAGE5, voltageUnits::mV);
-        }
+        Controller1.ButtonL1.pressed(launcher_forward);
+        Controller1.ButtonL1.released(launcher_stop);
         //--------------------------------------------end launcher--------------------------------------------
 
         
