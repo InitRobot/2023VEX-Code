@@ -52,8 +52,8 @@ distance distance_sensor = distance(PORT18);
 motor classis_left_1 = motor(PORT1, ratio18_1, false);
 motor classis_left_2 = motor(PORT12, ratio18_1, true);
 motor_group classis_left = motor_group(classis_left_1, classis_left_2);                        //bottom_l
-motor classis_right_1 = motor(PORT2, ratio18_1, false);
-motor classis_right_2 = motor(PORT13, ratio18_1, true);
+motor classis_right_1 = motor(PORT2, ratio18_1, true);
+motor classis_right_2 = motor(PORT13, ratio18_1, false);
 motor_group classis_right = motor_group(classis_right_1, classis_right_2);                       //bottom_r
 motor classis_horizontal = motor(PORT3, ratio18_1, false);
 inertial DrivetrainInertial = inertial(PORT6);
@@ -95,7 +95,7 @@ void classis_move(float left_volt, float right_volt, float horizontal_volt)
     }
 
     classis_left.spin(forward, post_classis_left_volt, voltageUnits::mV);
-    classis_right.spin(reverse, post_classis_right_volt, voltageUnits::mV);
+    classis_right.spin(forward, post_classis_right_volt, voltageUnits::mV);
     classis_horizontal.spin(forward, horizontal_volt, voltageUnits::mV);
 }
 
@@ -169,7 +169,29 @@ void pre_auton(void)
 void autonomous(void)
 {
     //底盘初始化
-    DrivetrainInertial.calibrate();
+    //DrivetrainInertial.calibrate();
+    //launcher.spin(forward, VOLTAGE5, voltageUnits::mV);
+    intake.spin(forward, -12800, voltageUnits::mV); 
+    //Drivetrain.turnFor(right,90.0,degrees, false);
+    Drivetrain.driveFor(1400,distanceUnits::mm, 150, velocityUnits::pct,true);
+    wait(100, msec);
+    Drivetrain.driveFor(-600,distanceUnits::mm, 50, velocityUnits::pct,true);
+    Drivetrain.turn(right,30,velocityUnits::pct);
+    wait(400, msec);
+    Drivetrain.turn(right,0,velocityUnits::pct);
+    launcher.spin(forward, VOLTAGE5, voltageUnits::mV);
+    wait(900, msec);
+    launcher.spin(forward, 0, voltageUnits::mV);
+
+    Drivetrain.turn(left,30,velocityUnits::pct);
+    wait(500, msec);
+    Drivetrain.turn(right,0,velocityUnits::pct);
+    wait(200, msec);
+    Drivetrain.driveFor(-800,distanceUnits::mm, 150, velocityUnits::pct,true);
+    Drivetrain.turn(right,150,velocityUnits::pct);
+    wait(530, msec);
+    Drivetrain.turn(right,0,velocityUnits::pct);
+    Drivetrain.driveFor(-900,distanceUnits::mm, 150, velocityUnits::pct,true);
 
 }
 
@@ -177,7 +199,7 @@ void autonomous(void)
 void usercontrol(void)
 {
     //底盘初始化
-    DrivetrainInertial.calibrate();
+    //DrivetrainInertial.calibrate();
 
     float intake_spin = -VOLTAGE5;
     int ball = 0;//0:stop,1:up,-1:down
