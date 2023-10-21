@@ -75,7 +75,7 @@ motor_group intake = motor_group(intake_left, intake_right);                    
 bool RemoteControlCodeEnabled = true;
 
 
-float sensitivity = 0.5;//range:(0,1]...........................................................................require seting<<<<<<<<<<<<<<<<<<<-----
+float sensitivity = 0.43;//range:(0,1]...........................................................................require seting<<<<<<<<<<<<<<<<<<<-----
 
 //The followings are to prevent over voltaging on one side, which leads to a lack of rotation while at high speed.
 void classis_move(float left_volt, float right_volt, float horizontal_volt)
@@ -193,7 +193,6 @@ void usercontrol(void)
     //DrivetrainInertial.calibrate();
 
     int times = 0;
-    int launch = 0;
     while (1)
     {
         Brain.Screen.clearScreen();
@@ -229,7 +228,7 @@ void usercontrol(void)
 
         //=========================================intake=================================
         //手动操控
-        /*
+        
         if (intake_mode != 1)
         {
             //按住R1 intake向上
@@ -238,7 +237,12 @@ void usercontrol(void)
             //按住R2 intake向下
             Controller1.ButtonR2.pressed(intake_backward);
             Controller1.ButtonR2.released(intake_stop);
-        }*/
+        }
+        else
+        {
+            Controller1.ButtonR1.pressed(intake_forward);
+            Controller1.ButtonR2.pressed(intake_backward);
+        }
 
         //检测模式更改
         Controller1.ButtonY.pressed(manual_mode);
@@ -261,11 +265,15 @@ void usercontrol(void)
                 Controller1.ButtonR1.pressed(intake_forward);
                 Controller1.ButtonR2.pressed(intake_backward);
                 ball_distance = distance_sensor.objectDistance(mm);
-                //当球离传感器400mm以内时阻止球向上
-                double bordor = 200;//分界线（大于则上，小于则下） 
+                Controller1.Screen.newLine();
+                Controller1.Screen.print(ball_distance);
+                //当球离传感器300mm以内时阻止球向上
+                double bordor = 300;//分界线（大于则上，小于则下） 
                 if (ball_distance < bordor && intake_direction == 0)
                 {
                     intake.spin(forward, 0, voltageUnits::mV);
+                    Controller1.Screen.newLine();
+                    Controller1.Screen.print("stop");
                 }
                 break;
             }
