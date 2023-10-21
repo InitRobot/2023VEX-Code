@@ -229,6 +229,7 @@ void usercontrol(void)
 
         //=========================================intake=================================
         //手动操控
+        /*
         if (intake_mode != 1)
         {
             //按住R1 intake向上
@@ -237,7 +238,7 @@ void usercontrol(void)
             //按住R2 intake向下
             Controller1.ButtonR2.pressed(intake_backward);
             Controller1.ButtonR2.released(intake_stop);
-        }
+        }*/
 
         //检测模式更改
         Controller1.ButtonY.pressed(manual_mode);
@@ -261,7 +262,8 @@ void usercontrol(void)
                 Controller1.ButtonR2.pressed(intake_backward);
                 ball_distance = distance_sensor.objectDistance(mm);
                 //当球离传感器400mm以内时阻止球向上
-                if (ball_distance < 400 && intake_direction == 0)
+                double bordor = 200;//分界线（大于则上，小于则下） 
+                if (ball_distance < bordor && intake_direction == 0)
                 {
                     intake.spin(forward, 0, voltageUnits::mV);
                 }
