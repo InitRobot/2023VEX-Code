@@ -162,6 +162,9 @@ void autonomous(void)
     //底盘初始化
     //DrivetrainInertial.calibrate();
     //launcher.spin(forward, VOLTAGE5, voltageUnits::mV);
+    //底盘刹车模式hold
+    Drivetrain.setStopping(hold);
+
     intake.spin(forward, -12800, voltageUnits::mV); 
     //Drivetrain.turnFor(right,90.0,degrees, false);
     Drivetrain.driveFor(1400,distanceUnits::mm, 150, velocityUnits::pct,true);
@@ -191,6 +194,8 @@ void usercontrol(void)
 {
     //底盘初始化
     //DrivetrainInertial.calibrate();
+    //底盘刹车模式coast
+    Drivetrain.setStopping(brake);
 
     int times = 0;
     while (1)
