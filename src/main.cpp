@@ -58,6 +58,7 @@ motor_group classis_right = motor_group(classis_right_1, classis_right_2);      
 motor classis_horizontal = motor(PORT3, ratio18_1, false);
 inertial DrivetrainInertial = inertial(PORT6);
 smartdrive Drivetrain = smartdrive(classis_left, classis_right, DrivetrainInertial, 319.19, 320, 40, mm, 1);
+motor_group Classis = motor_group(classis_left_1, classis_left_2, classis_right_1, classis_right_2);
 
 //launcher
 motor launcher_left = motor(PORT4, ratio36_1, false);                    //right_leftMotorA
@@ -159,6 +160,7 @@ void pre_auton(void)
 //自动程序
 void autonomous(void)
 {
+    /*
     //底盘初始化
     //DrivetrainInertial.calibrate();
     //launcher.spin(forward, VOLTAGE5, voltageUnits::mV);
@@ -186,7 +188,8 @@ void autonomous(void)
     wait(530, msec);
     Drivetrain.turn(right,0,velocityUnits::pct);
     Drivetrain.driveFor(-900,distanceUnits::mm, 150, velocityUnits::pct,true);
-
+    */
+    Classis.spin(forward, VOLTAGE5, voltageUnits::mV);
 }
 
 //手动程序
