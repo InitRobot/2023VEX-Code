@@ -1,19 +1,18 @@
 {
-	"extension": {
-		"version": "0.5.0",
-		"json": 2
-	},
 	"project": {
-		"name": "defence",
+		"name": "VEXcode_Project",
+		"slot": 5,
 		"description": "",
-		"creationDate": "2023/10/17 18:34:36",
 		"platform": "V5",
+		"creationDate": "Tue, 21 Nov 2023 10:29:24 GMT",
 		"language": "cpp",
-		"slot": 1,
 		"sdkVersion": "V5_20220726_10_00_00",
 		"cpp": {
-			"includePath": [],
-			"printf_float": true
+			"includePath": []
 		}
+	},
+	"extension": {
+		"version": "0.5.0",
+		"json": 1
 	}
 }
