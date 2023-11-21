@@ -15,6 +15,8 @@ using namespace vex;
 // Brain should be defined by default
 brain Brain;
 
+//定义intake模式
+int intake_mode = 0;//0：无模式，1：暂存，2：发射
 
 // START V5 MACROS
 #define waitUntil(condition)                                                   \
