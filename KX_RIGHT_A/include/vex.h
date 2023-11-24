@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       vex.h                                                     */
@@ -9,7 +7,6 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 //
->>>>>>> 9910aca (deshit)
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,10 +15,7 @@
 #include "v5.h"
 #include "v5_vcs.h"
 
-<<<<<<< HEAD
-=======
 #include "robot-config.h"
->>>>>>> 9910aca (deshit)
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \
