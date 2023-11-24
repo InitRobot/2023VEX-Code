@@ -17,7 +17,6 @@
 		{
 			"name": "Win32",
 			"includePath": [
-<<<<<<< HEAD
 				"${vex_sdkIncludes}"
 			],
 			"compilerPath": "${vex_compilerPath}",
@@ -44,16 +43,6 @@
 			"cStandard": "gnu99",
 			"cppStandard": "gnu++11",
 			"intelliSenseMode": "linux-clang-x86"
-=======
-				"${workspaceFolder}/**"
-			],
-			"defines": [
-				"_DEBUG",
-				"UNICODE",
-				"_UNICODE"
-			],
-			"compileCommands": "${workspaceFolder}/KX_RIGHT_A/compile_commands.json"
->>>>>>> 9910aca (deshit)
 		}
 	],
 	"version": 4

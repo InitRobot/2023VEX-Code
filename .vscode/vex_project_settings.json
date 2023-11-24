@@ -1,18 +1,10 @@
 {
 	"project": {
-<<<<<<< HEAD
 		"name": "VEXcode_Project",
 		"slot": 5,
 		"description": "",
 		"platform": "V5",
 		"creationDate": "Tue, 21 Nov 2023 10:29:24 GMT",
-=======
-		"name": "KX_RIGHT_A",
-		"slot": 2,
-		"description": "Empty V5 C++ Project",
-		"platform": "V5",
-		"creationDate": "Tue, 21 Nov 2023 11:26:37 GMT",
->>>>>>> 9910aca (deshit)
 		"language": "cpp",
 		"sdkVersion": "V5_20220726_10_00_00",
 		"cpp": {
