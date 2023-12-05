@@ -1,82 +1,143 @@
-#pragma region VEXcode Generated Robot Configuration
-#pragma region VEXcode Generated Robot Configuration
-// Make sure all required headers are included.
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <math.h>
-#include <string.h>
-
-
 #include "vex.h"
+#include "basic-functions.h"
+#include "parameters.h"
+#include "autonomous.h"
+#include "my-timer.h"
+#include "controller.h"
+#include "cstdlib"
+#include "iostream"
+#include "GPS.h"
+#include "sensors.h"
+#include "adjusment.h"
 
 using namespace vex;
+competition Competition;
 
-// Brain should be defined by default
-brain Brain;
+int auton_strategy = 0;
 
-//定义intake模式
-int intake_mode = 0;//0：无模式，1：暂存，2：发射
-
-// START V5 MACROS
-#define waitUntil(condition)                                                   \
-  do {                                                                         \
-    wait(5, msec);                                                             \
-  } while (!(condition))
-
-#define repeat(iterations)                                                     \
-  for (int iterator = 0; iterator < iterations; iterator++)
-// END V5 MACROS
-
-
-// Robot configuration code.
-/*vex-vision-config:begin*/
-vision::signature Vision13__BLUE_BALL = vision::signature (1, -2705, -1873, -2289,7615, 10485, 9050,2.1, 0);
-vision Vision13 = vision (PORT13, 50, Vision13__BLUE_BALL);
-/*vex-vision-config:end*/
-#pragma endregion VEXcode Generated Robot Configuration
-
-// Include the V5 Library
-#include "vex.h"
-  
-// Allows for easier use of the VEX Library
-using namespace vex;
-
-int Brain_precision = 0, Console_precision = 0, Vision13_objectIndex = 0;
-
-float myVariable;
-
-// "when started" hat block
-int whenStarted1() {
-  //printf("1");
-  Brain.Screen.print("VEXcode");
-  
-  
-  int j = 0;
-  while(true){
-    Vision13.takeSnapshot(Vision13__BLUE_BALL);
-    j++;
-    Brain.Screen.setCursor(1, 1);
-    //Brain.Screen.print('1');
-    //Brain.Screen.newLine();
-    Brain.Screen.print("N: %d", Vision13.objectCount);
-    Brain.Screen.newLine();
-    for(int i = 0; i < Vision13.objectCount; i++) {
-      Brain.Screen.print("X: %d", Vision13.objects[i].centerX);
-      Brain.Screen.newLine();
-      Brain.Screen.print("Y: %d", Vision13.objects[i].centerY);
-      Brain.Screen.newLine();
-    }
-    Brain.Screen.print(j);
-    wait(0.1, seconds);
-    Brain.Screen.clearScreen();
-
-  }
-  
-  return 0;
+void pre_auton(void) {
+  vexcodeInit();
 }
 
+void autonomous(void) {
+  switch(auton_strategy) {
+    case 0:
+      //auto one
+      break;
+    case 1:
+      //auto two
+      break;
+    case 2:
+      //auto three
+      break;
+    case 3:
+      //auto four
+      break;
+    case 4:
+      auton_sb();
+      break;
+    }
+}
+
+void usercontrol(void) {
+  // User control code here, inside the loop
+  bool is_base_locked = false;
+  while (1) {
+    // Controller Input
+    defineController();
+    // Base Movement Control
+  if (std::abs(A3) < JOYSTICK_DEADZONE)
+    A3 = 0;
+  if (std::abs(A1) < JOYSTICK_DEADZONE)
+    A1 = 0;
+  if (std::abs(A3 + A1) > MOVEMENT_LOWER_LIMIT)
+    moveLeft(A3 + A1);
+  else
+    unlockLeft();
+  if (std::abs(A3 - A1) > MOVEMENT_LOWER_LIMIT)
+    moveRight(A3 - A1);
+  else
+    unlockRight();
+  }
+
+  //lock：刹车模式回位，Unlock：滑行
+  if(B && !last_B) {
+    is_base_locked = !is_base_locked;
+    if(is_base_locked) {
+      lockBase();
+    }
+    else {
+      unlockBase();
+    }
+  }
+
+    if(DOWN && !last_DOWN) {
+      runAuton();
+      // tuning_robot();
+    }
+    // Set auton strategy
+    if(RIGHT && !last_RIGHT) {
+      auton_strategy++;
+      auton_strategy = auton_strategy % 4;
+      switch(auton_strategy) {
+        case 0:
+          Controller1.Screen.setCursor(5, 1);
+          Controller1.Screen.print("%10s", "auto one");
+          break;
+        case 1:
+          Controller1.Screen.setCursor(5, 1);
+          Controller1.Screen.print("%10s", "auto two");
+          break;
+        case 2:
+          Controller1.Screen.setCursor(5, 1);
+          Controller1.Screen.print("%10s", "auto three");
+          break;
+        case 3:
+          Controller1.Screen.setCursor(5, 1);
+          Controller1.Screen.print("%10s", "auto four");
+          break;
+        case 4:
+          Controller1.Screen.setCursor(5, 1);
+          Controller1.Screen.print("%10s", "yousb");
+          break;
+      }
+    }
+    // Print on brain
+    Brain.Screen.setCursor(1, 1);
+    Brain.Screen.print("Heading: %3.2f", my_sensors.getBaseHeading());
+    Brain.Screen.setCursor(2, 1);
+    Brain.Screen.print("Forward Position: %4.1f", my_sensors.getBaseForwardPos());
+    Brain.Screen.setCursor(3, 1);
+    switch(auton_strategy) {
+      case 0:
+        Brain.Screen.print("%10s", "auto one");
+        break;
+      case 1:
+        Brain.Screen.print("%10s", "auto two");
+        break;
+      case 2:
+        Brain.Screen.print("%10s", "auto three");
+        break;
+      case 3:
+        Brain.Screen.print("%10s", "auto four");
+        break;
+      case 4:
+        Brain.Screen.print("%10s", "yousb");
+        break;
+    }
+    this_thread::sleep_for(5);
+  }
 
 int main() {
-  whenStarted1();
+  thread AutonSensors(autonSensors);
+  thread AutonGps(autonGPS);
+  // Set up callbacks for autonomous and driver control periods.
+  Competition.autonomous(autonomous);
+  Competition.drivercontrol(usercontrol);
+  // Run the pre-autonomous function.
+  pre_auton();
+  // Prevent main from exiting with an infinite loop.
+  while (true) {
+    wait(100, msec);
+  }
 }
