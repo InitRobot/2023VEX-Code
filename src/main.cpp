@@ -60,7 +60,7 @@ void usercontrol(void) {
     unlockRight();
   }
 
-  // Base lock
+  //lock：刹车模式回位，Unlock：滑行
   if(B && !last_B) {
     is_base_locked = !is_base_locked;
     if(is_base_locked) {

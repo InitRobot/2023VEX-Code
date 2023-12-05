@@ -4,7 +4,7 @@ source: [VEX V5 Program Template](https://github.com/CreatechStudio/VEX-V5-Progr
 
 ## 简介
 
-​	这是一个基于VEX V5竞赛模板的基本程序，它由C++编写，包含了
+这是一个基于VEX V5竞赛模板的基本程序，它由C++编写，包含了
 
 - 基本的底盘控制
 - PID控制
