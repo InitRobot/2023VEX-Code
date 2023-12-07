@@ -31,6 +31,21 @@ void auton_sb(void) {
   auton_pre_usercontrol();
 }
 
+void auton_one(void){
+  Drivetrain.driveFor(1400,distanceUnits::mm, 100, velocityUnits::pct,true);
+}
+
+void auton_two(void){
+  
+}
+
+void auton_three(void){
+  
+}
+
+void auton_four(void){
+  
+}
 ///////////////////////////////////////////////////////
 // Your Autonomous here
 // use void left/right_<logcal max score>_<pre load>(void){}

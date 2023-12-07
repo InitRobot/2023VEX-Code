@@ -13,7 +13,10 @@ void auton_init(void);
 void auton_pre_usercontrol(void);
 
 void auton_sb(void);
-
+void auton_one(void);
+void auton_two(void);
+void auton_three(void);
+void auton_four(void);
 ///////////////////////////////////////////////////////
 // your declarations of your autonomous here
 ///////////////////////////////////////////////////////
