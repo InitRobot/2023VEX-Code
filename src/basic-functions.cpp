@@ -6,7 +6,6 @@
 #include "sensors.h"
 
 static float left_pos_last = 0, right_pos_last = 0;
-bool shootF = 0;
 
 /**
  * powers all motors on left side of base with duty cycle _input%
@@ -77,9 +76,8 @@ void RollerSpin(int vol) {
 
 //投射
 
-void Shoot(void) {
-  shootF=!shootF;
-  Motor_Shoot.spin(directionType::fwd, shootF*6400, voltageUnits::mV);
+void Shoot(bool shootF) {
+  Motor_Shoot.spin(directionType::fwd, shootF*VOLTAGE5, voltageUnits::mV);
 }
 
 /**
@@ -132,6 +130,10 @@ void lockBase(void) {
 void unlockBase(void) {
   unlockLeft();
   unlockRight();
+}
+
+void liftUp(void) {
+
 }
 
 ///////////////////////////////////////////////////////

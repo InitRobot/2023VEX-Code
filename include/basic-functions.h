@@ -19,7 +19,7 @@ void moveClockwise(float);
 void lockBase(void);
 void unlockBase(void);
 void RollerSpin(int vol);
-void Shoot(void);
+void Shoot(bool shootF);
 ///////////////////////////////////////////////////////
 // declaration of your output functions here
 ///////////////////////////////////////////////////////

@@ -68,19 +68,20 @@ void usercontrol(void) {
       unlockRight();
 
     //滚筒移动
-    if(UP && !last_UP) {
+    if(Controller1.ButtonR1.pressing()) {
       RollerSpin(VOLTAGE5);
-    }
-    if(DOWN && !last_DOWN) {
+    } else if(Controller1.ButtonR2.pressing()) {
       RollerSpin(-VOLTAGE5);
-    }
-    if(LEFT && !last_LEFT) {
+    } else {
       RollerSpin(0);
     }
 
-    if(L1 && ! last_L1) {
-      Shoot();
+    if(Controller1.ButtonL1.pressing()) {
+      Shoot(1);
+    } else {
+      Shoot(0);
     }
+    
   }
 
   // Base lock
