@@ -16,5 +16,6 @@ extern motor Motor_Roller;
 extern inertial IMU;
 extern smartdrive Drivetrain;
 extern motor Motor_Shoot;
+extern motor Motor_Lift;
 
 void  vexcodeInit( void );

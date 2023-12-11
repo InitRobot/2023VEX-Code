@@ -12,18 +12,30 @@ brain  Brain;
 controller Controller1 = controller(primary);
 
 #ifdef ROBOT_ONE
+  /*
   motor Motor_BaseLF = motor(PORT1, ratio6_1, true);
   motor Motor_BaseLM = motor(PORT2, ratio6_1, false);//LBU
   motor Motor_BaseLB = motor(PORT3, ratio6_1, true);//LBD
   motor Motor_BaseRF = motor(PORT4, ratio6_1, true);
   motor Motor_BaseRM = motor(PORT5, ratio6_1, false);//RBU
   motor Motor_BaseRB = motor(PORT9, ratio6_1, true);//RBD
+  motor Motor_Roller = motor(PORT20, ratio18_1, true);
+  */
+  
+  motor Motor_BaseLF = motor(PORT1, ratio6_1, false);
+  motor Motor_BaseLM = motor(PORT2, ratio6_1, true);//LBU
+  motor Motor_BaseLB = motor(PORT3, ratio6_1, false);//LBD
+  motor Motor_BaseRF = motor(PORT4, ratio6_1, true);
+  motor Motor_BaseRM = motor(PORT5, ratio6_1, false);//RBU
+  motor Motor_BaseRB = motor(PORT9, ratio6_1, true);//RBD
   motor Motor_Roller = motor(PORT12, ratio18_1, true);
+  
   inertial IMU = inertial(PORT10);
   motor_group BaseL= motor_group(Motor_BaseLB, Motor_BaseLF, Motor_BaseLM);
   motor_group BaseR= motor_group(Motor_BaseRB, Motor_BaseRF, Motor_BaseRM);
   smartdrive Drivetrain = smartdrive(BaseL, BaseR, IMU, 0, 320, 40, mm, 1);//垂直距离、轮距、轴距
   motor Motor_Shoot = motor(PORT11, ratio6_1, false);
+  motor Motor_Lift = motor(PORT20, ratio18_1, true);
 #endif
 
 #ifdef ROBOT_TWO

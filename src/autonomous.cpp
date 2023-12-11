@@ -31,16 +31,54 @@ void auton_sb(void) {
   auton_pre_usercontrol();
 }
 
-void auton_one(void){
-  Drivetrain.driveFor(1400,distanceUnits::mm, 100, velocityUnits::pct,true);
+void auton_one(void){//for:run
+  moveForward(-100);
+  //wait(00, msec);
 }
 
-void auton_two(void){
-  
+void auton_two(void){//close
+  RollerSpin(-VOLTAGE5);
+  moveForward(-100);
+  wait(700, msec);
+  moveForward(-50);
+  wait(500, msec);
+  moveForward(0);
+  wait(200, msec);
+
+  moveClockwise(-50);
+  wait(500, msec);
+  moveClockwise(0);
+  RollerSpin(0);
+
+  moveForward(-50);
+  wait(700, msec);
+  moveForward(0);
+
 }
 
-void auton_three(void){
-  
+void auton_three(void){//far(1g)
+  RollerSpin(VOLTAGE5);
+  moveForward(-100);
+  wait(700, msec);
+  moveForward(-50);
+  wait(500, msec);
+  moveForward(0);
+  wait(200, msec);
+
+  moveClockwise(-50);
+  wait(300, msec);
+  moveClockwise(0);
+  RollerSpin(-VOLTAGE5);
+
+  moveForward(-100);
+  wait(400, msec);
+  moveForward(0);
+  wait(200, msec);
+  moveForward(100);
+  wait(400, msec);
+  moveForward(0);
+
+
 }
 
 void auton_four(void){

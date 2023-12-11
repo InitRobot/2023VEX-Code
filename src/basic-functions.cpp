@@ -133,7 +133,7 @@ void unlockBase(void) {
 }
 
 void liftUp(void) {
-
+  Motor_Lift.spinFor(500, timeUnits::msec);
 }
 
 ///////////////////////////////////////////////////////
